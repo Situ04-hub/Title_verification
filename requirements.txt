@@ -1,0 +1,13 @@
+asgiref==3.11.1
+distlib==0.4.0
+Django==6.0.2
+filelock==3.24.3
+gunicorn==25.1.0
+jellyfish==1.2.1
+packaging==26.0
+platformdirs==4.9.2
+RapidFuzz==3.14.3
+sqlparse==0.5.5
+tzdata==2025.3
+virtualenv==20.38.0
+whitenoise==6.12.0

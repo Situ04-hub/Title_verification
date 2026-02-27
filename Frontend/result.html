@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verification Result — Research Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:           #f5f2ec;
+      --bg-dark:      #edeae2;
+      --bg-darker:    #e5e1d8;
+      --surface:      #ffffff;
+      --border:       #d8d3c8;
+      --border-dark:  #c4bfb2;
+      --ink:          #1a1814;
+      --ink-mid:      #4a4640;
+      --ink-muted:    #8c887f;
+      --gold:         #b8923a;
+      --gold-light:   #d4a955;
+      --gold-dim:     rgba(184, 146, 58, 0.10);
+      --shadow:       rgba(26, 24, 20, 0.07);
+      --shadow-deep:  rgba(26, 24, 20, 0.16);
+      --green:        #3a7d52;
+      --green-dim:    rgba(58, 125, 82, 0.09);
+      --green-border: rgba(58, 125, 82, 0.25);
+      --red:          #9b3a3a;
+      --red-dim:      rgba(155, 58, 58, 0.09);
+      --red-border:   rgba(155, 58, 58, 0.25);
+      --amber:        #9b6e1e;
+      --amber-dim:    rgba(155, 110, 30, 0.09);
+      --amber-border: rgba(155, 110, 30, 0.25);
+    }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      padding: 100px 20px 64px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Paper ruled lines */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 28px,
+        rgba(26,24,20,0.018) 28px,
+        rgba(26,24,20,0.018) 29px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Corner brackets */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 32px; left: 32px;
+      width: 40px; height: 40px;
+      border-top: 1px solid var(--gold);
+      border-left: 1px solid var(--gold);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .corner-br {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      width: 40px; height: 40px;
+      border-bottom: 1px solid var(--gold);
+      border-right: 1px solid var(--gold);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top bar */
+    .top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 36px;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245,242,236,0.93);
+      backdrop-filter: blur(12px);
+      animation: fadeDown 0.7s ease both;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .brand-name em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .brand-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--ink-muted);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    /* Page wrapper */
+    .page-wrap {
+      position: relative;
+      z-index: 2;
+      width: min(760px, 94vw);
+      margin: 0 auto;
+      animation: rise 0.8s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      margin-bottom: 36px;
+    }
+
+    .seal {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .seal-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-dark));
+    }
+
+    .seal-line.right {
+      background: linear-gradient(90deg, var(--border-dark), transparent);
+    }
+
+    .seal-mark {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+
+    .page-header h1 {
+      font-size: clamp(30px, 5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .page-header h1 em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .results-meta {
+      margin-top: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 0.12em;
+      animation: fadeUp 0.6s 0.25s ease both;
+    }
+
+    .results-meta strong {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ── Summary tally strip ── */
+    .tally-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px var(--shadow);
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .tally-cell {
+      background: var(--surface);
+      padding: 20px 24px;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+
+    .tally-cell:last-child { border-right: none; }
+
+    .tally-cell::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+
+    .tally-cell.approved::before { background: var(--green); }
+    .tally-cell.rejected::before { background: var(--red); }
+    .tally-cell.warning::before  { background: var(--amber); }
+
+    .tally-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tally-cell.approved .tally-label { color: var(--green); }
+    .tally-cell.rejected .tally-label { color: var(--red); }
+    .tally-cell.warning  .tally-label { color: var(--amber); }
+
+    .tally-value {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .tally-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--ink-muted);
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    /* ── Results list ── */
+    .results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Stagger entrance */
+    .result-card { animation: fadeUp 0.5s ease both; }
+    .result-card:nth-child(1)  { animation-delay: 0.35s; }
+    .result-card:nth-child(2)  { animation-delay: 0.42s; }
+    .result-card:nth-child(3)  { animation-delay: 0.49s; }
+    .result-card:nth-child(4)  { animation-delay: 0.56s; }
+    .result-card:nth-child(5)  { animation-delay: 0.63s; }
+    .result-card:nth-child(n+6){ animation-delay: 0.68s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px var(--shadow);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px var(--shadow-deep);
+    }
+
+    /* Left status stripe */
+    .result-card.approved { border-left: 3px solid var(--green); }
+    .result-card.rejected { border-left: 3px solid var(--red); }
+    .result-card.warning  { border-left: 3px solid var(--amber); }
+
+    /* Card top row */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .card-title-wrap { flex: 1; min-width: 0; }
+
+    .card-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      word-break: break-word;
+      line-height: 1.2;
+    }
+
+    /* Status badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 2px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge.approved {
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      color: var(--green);
+    }
+
+    .badge.rejected {
+      background: var(--red-dim);
+      border: 1px solid var(--red-border);
+      color: var(--red);
+    }
+
+    .badge.warning {
+      background: var(--amber-dim);
+      border: 1px solid var(--amber-border);
+      color: var(--amber);
+    }
+
+    .badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    .badge.approved .badge-dot { background: var(--green); }
+    .badge.rejected .badge-dot { background: var(--red); }
+    .badge.warning  .badge-dot { background: var(--amber); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* Card detail row */
+    .card-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--border);
+      background: var(--bg-dark);
+    }
+
+    .detail-cell {
+      padding: 13px 20px;
+      border-right: 1px solid var(--border);
+    }
+
+    .detail-cell:last-child { border-right: none; }
+
+    .detail-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--ink-mid);
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .detail-value.highlight { color: var(--gold); }
+
+    /* Probability bar */
+    .prob-wrap {
+      padding: 12px 24px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-darker);
+    }
+
+    .prob-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 7px;
+    }
+
+    .prob-score { color: var(--ink-mid); font-weight: 500; }
+
+    .prob-track {
+      height: 2px;
+      background: var(--border-dark);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .prob-fill {
+      height: 100%;
+      border-radius: 99px;
+    }
+
+    .prob-fill.high   { background: var(--green); }
+    .prob-fill.medium { background: var(--amber); }
+    .prob-fill.low    { background: var(--red); }
+
+    /* ── Bottom action row ── */
+    .action-row {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      animation: fadeUp 0.6s 0.7s ease both;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 28px;
+      background: var(--ink);
+      color: var(--bg);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-back::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(184,146,58,0.15) 100%);
+      pointer-events: none;
+    }
+
+    .btn-back:hover {
+      background: #2a2720;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--shadow-deep);
+    }
+
+    .action-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--ink-muted);
+      letter-spacing: 0.12em;
+      text-align: right;
+    }
+
+    .action-note span { color: var(--gold); }
+
+    @media (max-width: 560px) {
+      .card-details { grid-template-columns: 1fr 1fr; }
+      .tally-strip  { grid-template-columns: 1fr; }
+      .card-top     { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="corner-br"></div>
+
+  <div class="top-bar">
+    <div class="brand-name">Title<em>.</em>Verifier</div>
+    <div class="brand-tag">Hackathon 2026</div>
+  </div>
+
+  <div class="page-wrap">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="seal">
+        <div class="seal-line"></div>
+        <div class="seal-mark">Press Registration Authority — Verification Report</div>
+        <div class="seal-line right"></div>
+      </div>
+      <h1>Analysis <em>Complete.</em></h1>
+      <p class="results-meta">
+        <strong>{{ results|length }}</strong>
+        title{{ results|length|pluralize }} processed &nbsp;·&nbsp; results below
+      </p>
+    </div>
+
+    <!--
+      Add these to your render() call in views.py for live counts:
+        'approved': sum(1 for r in final_results if '✔' in r['status']),
+        'rejected': sum(1 for r in final_results if '✖' in r['status']),
+        'warnings': sum(1 for r in final_results if r['status'] == 'Warning'),
+    -->
+    <div class="tally-strip">
+      <div class="tally-cell approved">
+        <div class="tally-label">Approved</div>
+        <div class="tally-value">{{ approved|default:"—" }}</div>
+        <div class="tally-sub">Unique &amp; compliant</div>
+      </div>
+      <div class="tally-cell rejected">
+        <div class="tally-label">Rejected</div>
+        <div class="tally-value">{{ rejected|default:"—" }}</div>
+        <div class="tally-sub">Flagged or prohibited</div>
+      </div>
+      <div class="tally-cell warning">
+        <div class="tally-label">Warnings</div>
+        <div class="tally-value">{{ warnings|default:"—" }}</div>
+        <div class="tally-sub">Review recommended</div>
+      </div>
+    </div>
+
+    <!-- Result cards — wired to exact views.py keys -->
+    <div class="results-list">
+      {% for result in results %}
+
+        {% if '✔' in result.status %}
+        <div class="result-card approved">
+          <div class="card-top">
+            <div class="card-title-wrap">
+              <div class="card-eyebrow">Submitted Title</div>
+              <div class="card-title">{{ result.user_title }}</div>
+            </div>
+            <div class="badge approved">
+              <span class="badge-dot"></span>
+              {{ result.status }}
+            </div>
+          </div>
+          <div class="card-details">
+            <div class="detail-cell">
+              <div class="detail-label">Verdict Reason</div>
+              <div class="detail-value">{{ result.reason }}</div>
+            </div>
+            <div class="detail-cell">
+              <div class="detail-label">Closest DB Match</div>
+              <div class="detail-value">{% if result.match_name %}{{ result.match_name }}{% else %}None found{% endif %}</div>
+            </div>
+            <div class="detail-cell">
+              <div class="detail-label">Uniqueness Score</div>
+              <div class="detail-value highlight">{{ result.probability }}%</div>
+            </div>
+          </div>
+          <div class="prob-wrap">
+            <div class="prob-header">
+              <span>Uniqueness</span>
+              <span class="prob-score">{{ result.probability }} / 100</span>
+            </div>
+            <div class="prob-track">
+              <div class="prob-fill {% if result.probability >= 70 %}high{% elif result.probability >= 40 %}medium{% else %}low{% endif %}"
+                   style="width: {{ result.probability }}%;"></div>
+            </div>
+          </div>
+        </div>
+
+        {% elif '✖' in result.status %}
+        <div class="result-card rejected">
+          <div class="card-top">
+            <div class="card-title-wrap">
+              <div class="card-eyebrow">Submitted Title</div>
+              <div class="card-title">{{ result.user_title }}</div>
+            </div>
+            <div class="badge rejected">
+              <span class="badge-dot"></span>
+              {{ result.status }}
+            </div>
+          </div>
+          <div class="card-details">
+            <div class="detail-cell">
+              <div class="detail-label">Verdict Reason</div>
+              <div class="detail-value">{{ result.reason }}</div>
+            </div>
+            <div class="detail-cell">
+              <div class="detail-label">Closest DB Match</div>
+              <div class="detail-value">{% if result.match_name %}{{ result.match_name }}{% else %}None found{% endif %}</div>
+            </div>
+            <div class="detail-cell">
+              <div class="detail-label">Uniqueness Score</div>
+              <div class="detail-value highlight">{{ result.probability }}%</div>
+            </div>
+          </div>
+          <div class="prob-wrap">
+            <div class="prob-header">
+              <span>Uniqueness</span>
+              <span class="prob-score">{{ result.probability }} / 100</span>
+            </div>
+            <div class="prob-track">
+              <div class="prob-fill {% if result.probability >= 70 %}high{% elif result.probability >= 40 %}medium{% else %}low{% endif %}"
+                   style="width: {{ result.probability }}%;"></div>
+            </div>
+          </div>
+        </div>
+
+        {% else %}
+        <div class="result-card warning">
+          <div class="card-top">
+            <div class="card-title-wrap">
+              <div class="card-eyebrow">Submitted Title</div>
+              <div class="card-title">{{ result.user_title }}</div>
+            </div>
+            <div class="badge warning">
+              <span class="badge-dot"></span>
+              {{ result.status }}
+            </div>
+          </div>
+          <div class="card-details">
+            <div class="detail-cell">
+              <div class="detail-label">Verdict Reason</div>
+              <div class="detail-value">{{ result.reason }}</div>
+            </div>
+            <div class="detail-cell">
+              <div class="detail-label">Closest DB Match</div>
+              <div class="detail-value">{% if result.match_name %}{{ result.match_name }}{% else %}None found{% endif %}</div>
+            </div>
+            <div class="detail-cell">
+              <div class="detail-label">Uniqueness Score</div>
+              <div class="detail-value highlight">{{ result.probability }}%</div>
+            </div>
+          </div>
+          <div class="prob-wrap">
+            <div class="prob-header">
+              <span>Uniqueness</span>
+              <span class="prob-score">{{ result.probability }} / 100</span>
+            </div>
+            <div class="prob-track">
+              <div class="prob-fill {% if result.probability >= 70 %}high{% elif result.probability >= 40 %}medium{% else %}low{% endif %}"
+                   style="width: {{ result.probability }}%;"></div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+    </div>
+
+    <!-- Bottom action row -->
+    <div class="action-row">
+      <a class="btn-back" href="/">← Verify Another</a>
+      <div class="action-note">
+        Powered by <span>RapidFuzz</span> · <span>Jellyfish</span> · <span>Django</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
